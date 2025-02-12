@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -9,12 +10,15 @@ public class Spawner<T> : MonoBehaviour where T : MonoBehaviour
     [SerializeField] private int _poolMaxSize = 5;
 
     protected ObjectPool<T> _pool;
-    
     protected int minStartPointX = 15;
     protected int maxStartPointX = 25;
     protected int minStartPointZ = -10;
     protected int maxStartPointZ = 10;
     protected int startPointY = 15;
+    
+    public int Count { get; private set; }
+
+    public event Action Spawned;
 
     private void Awake()
     {
@@ -29,9 +33,22 @@ public class Spawner<T> : MonoBehaviour where T : MonoBehaviour
         );
     }
 
+    public int CountActiveInPool()
+    {
+       return _pool.CountActive;
+    }
+
+    public int CountAllInPool()
+    {
+        return _pool.CountAll;
+    }
+
     private void GetFromPool(T prefabObject)
     {
         prefabObject.gameObject.SetActive(true);
+
+        Count++;
+        Spawned?.Invoke();
     }
 
     private void ReleaseInPool(T prefabObject)

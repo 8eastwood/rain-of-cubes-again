@@ -26,7 +26,6 @@ public class Cube : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out Platform platform) && _colorChanged == false)
         {
-            Debug.Log("collision happened");
             SetRandomColor(_renderer);
             StartCoroutine(DestroyInTime(_lifeTime));
         }
@@ -50,7 +49,6 @@ public class Cube : MonoBehaviour
         int minColorNumber = 0;
         int randomColor = UnityEngine.Random.Range(minColorNumber, _colors.Count);
         meshRenderer.material = _colors[randomColor];
-        Debug.Log("Color is changed");
         _colorChanged = true;
     }
 }

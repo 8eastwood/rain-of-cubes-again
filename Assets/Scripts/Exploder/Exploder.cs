@@ -7,7 +7,6 @@ public class Exploder : MonoBehaviour
 
     [SerializeField] private float _defaultExplosionRadius = 5f;
     [SerializeField] private float _defaultExplosionForce = 150f;
-    // [SerializeField] private ParticleSystem _effect;
 
     public void Explode()
     {
@@ -17,8 +16,6 @@ public class Exploder : MonoBehaviour
         {
             explodableObject.AddExplosionForce(GetExplosionForce(), transform.position, GetExplosionRadius());
         }
-        
-        Debug.Log("explosion has happened");
     }
 
     private float CalculateAverageCoefficient()
