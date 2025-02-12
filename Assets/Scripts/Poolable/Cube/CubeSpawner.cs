@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CubeSpawner : Spawner<Cube>
 {
     [SerializeField] private float _repeatRate = 1f;
+
+    public event Action<Cube> BackToPool;
 
     private void Start()
     {
@@ -32,12 +36,13 @@ public class CubeSpawner : Spawner<Cube>
             startPointY, Random.Range(minStartPointZ, maxStartPointZ));
         cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
         
-        cube.Removed += RemoveObject;
+        cube.Removed += RemoveCube;
     }
         
-    private void RemoveObject(Cube cube)
+    private void RemoveCube(Cube cube)
     {
         _pool.Release(cube);
-        cube.Removed -= RemoveObject;
+        BackToPool?.Invoke(cube);
+        cube.Removed -= RemoveCube;
     }
 }
