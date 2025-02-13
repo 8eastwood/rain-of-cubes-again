@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Spawner<T> : MonoBehaviour where T : MonoBehaviour
+public class PoolHandler<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField] private T _prefabObject;
     [SerializeField] private int _poolCapacity = 5;

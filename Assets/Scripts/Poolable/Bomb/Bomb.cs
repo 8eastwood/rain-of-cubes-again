@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Exploder))]
 public class Bomb : MonoBehaviour
 {
     private Exploder _exploder;
@@ -13,7 +14,6 @@ public class Bomb : MonoBehaviour
 
     private void Awake()
     {
-        _exploder = GetComponent<Exploder>();
         StartCountdown();
     }
 

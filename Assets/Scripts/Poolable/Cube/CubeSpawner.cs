@@ -3,11 +3,11 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CubeSpawner : Spawner<Cube>
+public class CubeSpawner : PoolHandler<Cube>
 {
     [SerializeField] private float _repeatRate = 1f;
 
-    public event Action<Cube> BackToPool;
+    public event Action<Cube> BackedToPool;
 
     private void Start()
     {
@@ -34,15 +34,17 @@ public class CubeSpawner : Spawner<Cube>
         
         cube.transform.position = new Vector3(Random.Range(minStartPointX, maxStartPointX),
             startPointY, Random.Range(minStartPointZ, maxStartPointZ));
-        cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        cube.TransferVelocity();
         
-        cube.Removed += RemoveCube;
+        cube.Removed += ReleaseCube;
     }
+
+   
         
-    private void RemoveCube(Cube cube)
+    private void ReleaseCube(Cube cube)
     {
         _pool.Release(cube);
-        BackToPool?.Invoke(cube);
-        cube.Removed -= RemoveCube;
+        BackedToPool?.Invoke(cube);
+        cube.Removed -= ReleaseCube;
     }
 }

@@ -9,7 +9,7 @@ public class Cube : MonoBehaviour
     [SerializeField] private Material _startMaterial;
 
     private MeshRenderer _renderer;
-    private bool _colorChanged = false;
+    private bool _isColorChanged = false;
     private int _minLifeTime = 2;
     private int _maxLifeTime = 6;
     private int _lifeTime => UnityEngine.Random.Range(_minLifeTime, _maxLifeTime + 1);
@@ -24,11 +24,16 @@ public class Cube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out Platform platform) && _colorChanged == false)
+        if (collision.gameObject.TryGetComponent(out Platform platform) && _isColorChanged == false)
         {
             SetRandomColor(_renderer);
             StartCoroutine(DestroyInTime(_lifeTime));
         }
+    }
+
+    public void TransferVelocity()
+    {
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     private IEnumerator DestroyInTime(int delay)
@@ -40,7 +45,7 @@ public class Cube : MonoBehaviour
 
     private void ResetMaterial()
     {
-        _colorChanged = false;
+        _isColorChanged = false;
         _renderer.material = _startMaterial;
     }
 
@@ -49,6 +54,6 @@ public class Cube : MonoBehaviour
         int minColorNumber = 0;
         int randomColor = UnityEngine.Random.Range(minColorNumber, _colors.Count);
         meshRenderer.material = _colors[randomColor];
-        _colorChanged = true;
+        _isColorChanged = true;
     }
 }

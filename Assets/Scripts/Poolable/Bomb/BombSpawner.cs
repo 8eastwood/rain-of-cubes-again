@@ -1,17 +1,17 @@
 using UnityEngine;
 
-public class BombSpawner : Spawner<Bomb>
+public class BombSpawner : PoolHandler<Bomb>
 {
     [SerializeField] private CubeSpawner _cubeSpawner;
 
     private void OnEnable()
     {
-        _cubeSpawner.BackToPool += GetBombFromPool;
+        _cubeSpawner.BackedToPool += GetBombFromPool;
     }
 
     private void OnDisable()
     {
-        _cubeSpawner.BackToPool -= GetBombFromPool;
+        _cubeSpawner.BackedToPool -= GetBombFromPool;
     }
 
     private void GetBombFromPool(Cube cube)
@@ -21,12 +21,12 @@ public class BombSpawner : Spawner<Bomb>
         bomb.transform.position = cube.transform.position;
         bomb.StartCountdown();
         
-        bomb.Destroyed += RemoveBomb;
+        bomb.Destroyed += ReleaseBomb;
     }
 
-    private void RemoveBomb(Bomb bomb)
+    private void ReleaseBomb(Bomb bomb)
     {
-        bomb.Destroyed -= RemoveBomb;
+        bomb.Destroyed -= ReleaseBomb;
 
         _pool.Release(bomb);
     }
